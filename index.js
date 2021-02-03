@@ -71,7 +71,7 @@ app.all("/render", function (req, res) {
     */
     console.log("Render " + url);
 
-    let date = new Date();
+    let start = Date.now();
 
     if (options.sizes) {
         if (!Array.isArray(options.sizes)) {
@@ -93,7 +93,7 @@ app.all("/render", function (req, res) {
         .dest(path.join(__dirname, "renders"))
         .run()
         .then((r) => {
-            console.log("rendered " + url);
+            console.log("rendered " + url + " in " + (Date.now() - start) + "ms");
             let fileUrl = "https://img.webrender.co/" + r[0].filename;
             if (redirect) {
                 res.redirect(fileUrl);
@@ -109,12 +109,13 @@ app.all("/render", function (req, res) {
                     options: options
                 })
             }
-        }).catch((err) => {
-        console.warn(err);
-        res.status(500).json({
-            error: err
         })
-    })
+        .catch((err) => {
+            console.warn(err);
+            res.status(500).json({
+                error: err
+            })
+        })
 });
 
 app.get("/renders/:path?", function (req, res) {
@@ -127,7 +128,7 @@ setInterval(cleanup, 3600000);
 function cleanup() {
     console.log("Cleaning up renders...");
     console.debug(path.join(__dirname, "renders"))
-    let removed = findRemoveSync(path.join(__dirname, "renders"), {age: {seconds: 3600}, extensions: [".png"]});
+    let removed = findRemoveSync(path.join(__dirname, "renders"), {age: {seconds: 3600}, files: "*.png*"});
     console.log(removed)
     if (removed.length > 0) {
         console.log('removed:', removed);
