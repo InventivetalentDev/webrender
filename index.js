@@ -128,7 +128,7 @@ setInterval(cleanup, 3600000);
 function cleanup() {
     console.log("Cleaning up renders...");
     console.debug(path.join(__dirname, "renders"))
-    let removed = findRemoveSync(path.join(__dirname, "renders"), {age: {seconds: 3600}, files: "*.png*"});
+    let removed = findRemoveSync(path.join(__dirname, "renders"), {age: {seconds: 3600}, extensions: [".png"]});
     console.log(removed)
     if (removed.length > 0) {
         console.log('removed:', removed);
