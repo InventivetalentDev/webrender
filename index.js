@@ -59,7 +59,7 @@ app.all("/render", function (req, res) {
         return;
     }
     console.log(typeof url);
-    /*
+    console.log("Render " + url);
     if (!url.startsWith("http")) {
         res.status(400).json({error: "Invalid URL"});
         return;
@@ -68,8 +68,6 @@ app.all("/render", function (req, res) {
         res.status(400).json({error: "Invalid URL"});
         return;
     }
-    */
-    console.log("Render " + url);
 
     let start = Date.now();
 
